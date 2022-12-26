@@ -10,7 +10,7 @@ export default function TransactionForm({ newAddDataForm }) {
 
     const pickData = (type, e) => {
         e.preventDefault();
-        // if(name && amount){
+        if(name && amount){
         const Data = {
             id: UniqueId(),
             name: name,
@@ -21,9 +21,9 @@ export default function TransactionForm({ newAddDataForm }) {
         setName("")
         setAmount("")
         setError('')
-    // }else{
+    }else{
         setError('please fill all inputs')
-    // }
+    }
     }
 
     return (

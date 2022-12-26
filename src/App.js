@@ -1,5 +1,7 @@
-import ExpenceTracker from "./Components/ExpenceTracker";
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css'
+import ExpenceTracker from "./Components/ExpenceTracker";
+
 
 function App() {
   

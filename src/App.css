@@ -44,7 +44,7 @@
 }
 h1{
   
-    background-color: black;
+    /* background-color: black; */
     color: white;
 }
 
@@ -52,6 +52,10 @@ h2 {
   border-style: double;
   border-radius: 5px;
 }
+/* h3 {
+  border-style: double;
+  border-radius: 5px;
+} */
 
 body {
   background-image: linear-gradient(360deg, #9b8f8f, #e5dcdc00);

@@ -29,7 +29,6 @@ export default function ExpenceTracker() {
     setIncome(income);
     setExpense(expense);
   };
-  
 
   const newAddDataForm = (item) => {
     let newstatedata = [...history, item];
@@ -70,7 +69,7 @@ export default function ExpenceTracker() {
     <div>
       <Container>
         <Row>
-        <Card bg='dark' border="dark">
+          <Card bg="dark" border="dark">
             {" "}
             <h1>Expense Tracker</h1>{" "}
           </Card>

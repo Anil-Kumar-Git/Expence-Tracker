@@ -3,7 +3,7 @@ import Expense from "./Expence";
 import TransactionForm from "./TransactionForm";
 import TransactionHistory from "./TransactionHistory";
 import { useDispatch } from "react-redux";
-import { userAdded } from "../store/userSlice";
+import { userAdded, userDelete } from "../store/userSlice";
 import { Col, Row, Container, Card } from "react-bootstrap";
 
 export default function ExpenceTracker() {
@@ -32,19 +32,16 @@ export default function ExpenceTracker() {
 
   const newAddDataForm = (item) => {
     let newstatedata = [...history, item];
-    // console.log(newstatedata,"data");
     setHistory(newstatedata);
-    // localStorage.setItem('expenceTracerState', JSON.stringify(newstatedata));
     dispatch(userAdded(newstatedata));
   };
 
   const deleteValue = (id) => {
-    //     // const localState = JSON.parse(localStorage.getItem('expenceTracerState'));
-    //     let filtervData=localState.filter((val)=>val.id ==id);
-    // // console.log(filtervData , "filtervData");
-
     const newhistoryGenrate = history.filter((item) => item.id != id);
+   
+    console.log(id,"idForDelete")
     setHistory(newhistoryGenrate);
+    dispatch(userDelete(id));
   };
 
   // useEffect(() => {

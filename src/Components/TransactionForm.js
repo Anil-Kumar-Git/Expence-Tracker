@@ -1,25 +1,55 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Card } from 'react-bootstrap'
 import { UniqueId } from './ReuseComp'
+import moment from 'moment';
+import { useDispatch, useSelector } from 'react-redux';
+import { userAdded } from '../store/userSlice';
 
 export default function TransactionForm({ newAddDataForm }) {
+    const dispatch=useDispatch()
+    const InitialValues={
+        name:"",
+        amount:"",
+        date:"",
+        discription:"",
+        type:"income",
+    }
+    const [value, setValue] = useState(InitialValues)
 
-    const [name, setName] = useState("")
-    const [amount, setAmount] = useState()
+    const handleChange = (e) => {
+        setValue({ ...value, [e.target.name]: e.target.value });
+      };
+
     const [error, setError] = useState('')
+
+    // const state=useSelector((state)=>(state))
+
+//     useEffect(()=>{
+//    console.log(state.users,"stateusers")
+//     },[state])
+
+    const toDate=()=>{
+        const date = new Date();
+        const calenderDate=moment(date).calendar()
+        const localDate=moment(date).format("llll")
+        const shortDate= moment(date).format("MMMM Do YYYY");
+        return shortDate
+    }
 
     const pickData = (type, e) => {
         e.preventDefault();
-        if(name && amount){
+        if(value.name && value.amount && value.discription){
         const Data = {
+            ...value,
             id: UniqueId(),
-            name: name,
-            amount: parseInt(amount),
-            type: type
+            amount: parseInt(value.amount),
+            type: type ,
+            date:toDate()
         }
-        newAddDataForm(Data)
-        setName("")
-        setAmount("")
+        console.log(Data,"datatata")
+        dispatch(userAdded(Data))
+        // newAddDataForm(Data)
+        setValue(InitialValues)
         setError('')
     }else{
         setError('please fill all inputs')
@@ -38,15 +68,22 @@ export default function TransactionForm({ newAddDataForm }) {
                 <label>
                     Name
                     <div>
-                        <input type="text" name={"name"} value={name}
-                            onChange={(e) => setName(e.target.value)} onBlur={()=>{setError('')}} />
+                        <input type="text" name={"name"} value={value.name}
+                            onChange={handleChange} onBlur={()=>{setError('')}} />
                     </div>
                 </label>
                 <label>
                     Amount
                     <div>
-                        <input type="number" name={"amount"} value={amount}
-                            onChange={(e) => setAmount(e.target.value)} onBlur={()=>{setError('')}}/>
+                        <input type="number" name={"amount"} value={value.amount}
+                            onChange={handleChange} onBlur={()=>{setError('')}}/>
+                    </div>
+                </label>
+                <label>
+                    Discription
+                    <div>
+                        <input type="text" name={"discription"} value={value.discription}
+                            onChange={handleChange} onBlur={()=>{setError('')}}/>
                     </div>
                 </label>
                 <div>

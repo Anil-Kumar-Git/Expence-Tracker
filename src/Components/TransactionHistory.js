@@ -1,18 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { Card, ListGroup } from "react-bootstrap";
+import { useSelector } from "react-redux";
 
 export default function TransactionHistory({ historyData, deleteValue }) {
-  console.log(historyData, "histor");
+ 
   const [showAll, setShowAll] = useState(false);
+
+//  const allUserData=useSelector((state)=>(state))
+//  console.log(allUserData, "histor");
 
   useEffect(() => {
     dataHistory();
   }, [showAll]);
 
-  console.log(showAll);
+  const {userData}=useSelector((state)=>(state.users.userData))
+  console.log(userData,"userData");
 
   const dataHistory = () => {
-    const alldata = historyData?.map((data) => {
+    const alldata = userData?.map((data) => {
       let bgset = data?.type == "income" ? "success" : "danger";
       return (
         <ListGroup.Item variant={bgset} key={data.id}>
@@ -25,6 +30,9 @@ export default function TransactionHistory({ historyData, deleteValue }) {
           >
             <div>{data.name}</div>
             <div>Rs {data.amount}</div>
+            <div>
+              {data.date}
+            </div>
             <div>
               <button className="btn" onClick={() => deleteValue(data.id)}>
                 x

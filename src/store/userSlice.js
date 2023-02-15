@@ -12,7 +12,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 
 const initialState={
-    userData:[]
+    userData:[],
+    showDetails:{id:"" , details:"none"}
 }
 
 const UserSlice=createSlice({
@@ -21,16 +22,20 @@ const UserSlice=createSlice({
     reducers : {
         userAdded:(state, action)=> {
             const {payload}=action;
-            payload && state.userData.push(payload)
+            payload && state.userData.unshift(payload)
         },
         removeAllData:(state, action)=> {
             state.userData=[]
         },
         removeOneData:(state, action)=> {
             const {payload}=action;
-            // const newData = state?userData?.filter((item) =>( item.id != payload));
-            // console.log(newData,"newData")
-            // state.userData=newData
+            const newData = state?.userData?.filter((item) =>( item.id != payload));
+            state.userData=newData
+        },
+        showAllDetails:(state, action)=> {
+            const {payload}=action;
+            console.log(payload,"payload")
+            state.showDetails=payload
         },
         // userDelete(state, action) {
         //     const newhistoryGenrate = state?.filter((item) => item.id != action.payload);
@@ -40,5 +45,5 @@ const UserSlice=createSlice({
     }
 })
 
-export const {userAdded,userDelete}=UserSlice.actions;
+export const {userAdded,removeOneData,removeAllData,showAllDetails}=UserSlice.actions;
 export default UserSlice.reducer;

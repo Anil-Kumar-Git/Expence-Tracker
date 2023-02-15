@@ -1,58 +1,60 @@
 import React, { useEffect, useState } from "react";
-import { Card, ListGroup } from "react-bootstrap";
-import { useSelector } from "react-redux";
+import { Button, Card, Col, ListGroup, Row } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { removeAllData, showAllDetails } from "../store/userSlice";
+import DeleteModal from "./modals/deleteModal";
 
-export default function TransactionHistory({ historyData, deleteValue }) {
- 
-  const [showAll, setShowAll] = useState(false);
+export default function TransactionHistory() {
+  const dispatch = useDispatch();
+  const [deleteType, setDeleteType] = useState("");
+  const [showMore, setShowMore] = useState(false);
+  const [show, setShow] = useState(false);
 
-//  const allUserData=useSelector((state)=>(state))
-//  console.log(allUserData, "histor");
+  const { userData } = useSelector((state) => state.users.userData);
+  console.log(userData, "userData");
 
   useEffect(() => {
     dataHistory();
-  }, [showAll]);
-
-  const {userData}=useSelector((state)=>(state.users.userData))
-  console.log(userData,"userData");
+  }, [userData]);
 
   const dataHistory = () => {
-    const alldata = userData?.map((data) => {
+    let filterData = userData.slice(0, 2);
+    const alldata = filterData.map((data) => {
       let bgset = data?.type == "income" ? "success" : "danger";
       return (
-        <ListGroup.Item variant={bgset} key={data.id}>
-          <div
-            className="d-flex"
-            style={{
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
+        <>
+          <ListGroup.Item
+            onClick={() => showDetails(data.id, "one")}
+            variant={bgset}
+            key={data.id}
           >
-            <div>{data.name}</div>
-            <div>Rs {data.amount}</div>
-            <div>
-              {data.date}
+            <div
+              className="d-flex"
+              style={{
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <Row>
+                <Col>{data.name}</Col> <Col> {data.amount}</Col>{" "}
+                <Col>{data.date}</Col>
+              </Row>
             </div>
-            <div>
-              <button className="btn" onClick={() => deleteValue(data.id)}>
-                x
-              </button>
-            </div>
-          </div>
-        </ListGroup.Item>
+          </ListGroup.Item>
+        </>
       );
     });
-    if (alldata?.length > 3) {
-      if (showAll) {
-        return alldata;
-      } else {
-        let filtdata = alldata.pop();
-        return filtdata;
-      }
-    } else {
-      console.log("nooooo");
-      return alldata;
-    }
+    return alldata;
+  };
+
+  const showDetails = (id, type) => {
+    const data = { id: id, type: type };
+    dispatch(showAllDetails(data));
+  };
+
+  const deleteData = (type) => {
+    setDeleteType(type);
+    setShow(true);
   };
   return (
     <div>
@@ -60,35 +62,36 @@ export default function TransactionHistory({ historyData, deleteValue }) {
         <Card.Header style={{ height: 80 }}>
           <h3>Transaction History</h3>
         </Card.Header>
+
         <Card.Body>
           <ListGroup>
+            <ListGroup.Item>
+              <Row>
+                <Col>Name</Col>
+                <Col>Price</Col>
+                <Col>Date</Col>
+              </Row>
+            </ListGroup.Item>
             {dataHistory()}
-            {historyData.length > 2 ? (
-              !showAll ? (
+            <div>
+              {userData.length >= 3 && !showMore ? (
                 <button
-                  className="btn text-end"
-                  onClick={() => {
-                    setShowAll(true);
-                  }}
+                  onClick={
+                    // ()=>setShowMore(true)
+                    () => showDetails(0, "all")
+                  }
                 >
-                  {" "}
-                  Show More...
+                  Show More
                 </button>
-              ) : (
-                <button
-                  className="btn text-end"
-                  onClick={() => {
-                    setShowAll(false);
-                  }}
-                >
-                  {" "}
-                  Show Less...
-                </button>
-              )
-            ) : null}
+              ) : null}
+            </div>
           </ListGroup>
         </Card.Body>
+        <Col>
+          <Button className="expense-btn" onClick={() => deleteData("all")}>Remove History</Button>
+        </Col>
       </Card>
+      <DeleteModal show={show} setShow={setShow} />
     </div>
   );
 }
